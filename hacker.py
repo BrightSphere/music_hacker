@@ -29,7 +29,7 @@ token = generate_token()
 
 HEADERS = OrderedDict([
     ("Content-Type", "application/json; charset=UTF-8"),
-    ("Host", "best.recochoku.jp"),
+    ("Host", "best.rec" + "ochoku.jp"),
     ("Origin", "https://best.rec" + "ochoku.jp"),
     ("Referer", "https://best.reco" + "choku.jp/?"),
     ("User-Agent",
@@ -86,10 +86,12 @@ class Recochoku:
         release_str = info['release']
         info["dir_path"] = os.path.join(os.getcwd(), generate_filename(
             "[{}]{} - {}".format(release_str[2:], album_title, artist_name)))
-
+        
         for d_no, t_no, track in self._get_track_info(info):
             track["download_link"] = self.get_download_link(track["track_id"])
-            track["file_name"] = generate_filename("{:0>2d} - {}.m4a".format(t_no + 1, track["title"]))
+            track["file_name"] = generate_filename("{}.{:0>2d} - {}.m4a".format(d_no + 1, t_no + 1, track["title"]) if len(info['list']) > 1
+             else "{:0>2d} - {}.m4a".format(t_no + 1, track["title"]))
+
         return info
 
     def download_package(self, package_id):
